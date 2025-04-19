@@ -1,26 +1,16 @@
 #!/usr/bin/env python3
 
-import os
 import asyncio
-import aiohttp
-from bs4 import BeautifulSoup
 import json
-import logging
 import re
-from pathlib import Path
-from datetime import date
 from urllib.parse import urljoin
 
-BASE_URL = os.getenv("BASE_URL", "https://books.toscrape.com/")
-OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR", "data"))
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
-CONCURRENCY = int(os.getenv("CONCURRENCY", "5"))
+import aiohttp
+from bs4 import BeautifulSoup
+import logging
 
-OUTPUT_DIR.mkdir(exist_ok=True)
-today = date.today().isoformat()
-OUTPUT_FILE = OUTPUT_DIR / f"books_{today}.json"
+from config import BASE_URL, OUTPUT_FILE, CONCURRENCY, TODAY
 
-logging.basicConfig(level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
 sem = asyncio.Semaphore(CONCURRENCY)
@@ -73,9 +63,6 @@ def validate_url(url: str) -> bool:
         logger.warning(f"Invalid URL: outside base domain '{url}'.")
         return False
     return True
-
-
-# Central record-level validation
 
 
 def validate_record(record: dict, existing_upcs: set) -> bool:
@@ -188,7 +175,7 @@ async def scrape() -> None:
 
     with OUTPUT_FILE.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-    logger.info(f"Scrape complete for {today}: {len(data)} items saved.")
+    logger.info(f"Scrape complete for {TODAY}: {len(data)} items saved.")
 
 
 def main() -> None:
