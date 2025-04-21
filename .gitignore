@@ -1,4 +1,5 @@
 *.json
+*pb2*
 data/
 .idea/
 __pycache__/

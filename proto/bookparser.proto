@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package bookparser;
+
+// Raw scraped fields (all strings) of a book
+message RawBook {
+  string name           = 1;
+  string upc            = 2;
+  string price_excl_tax = 3;
+  string tax            = 4;
+  string availability   = 5;
+  string url            = 6;
+}
+
+// Fully parsed, typed book
+message ParsedBook {
+  string name           = 1;
+  string upc            = 2;
+  double price_excl_tax = 3;
+  double tax            = 4;
+  int32 availability    = 5;
+  string url            = 6;
+}
+
+// Parser interface exported by the server
+service Parser {
+  // Returns ParsedBook on success (OK),
+  // INVALID_ARGUMENT if any parse/validation failed,
+  // ALREADY_EXISTS if UPC already exists.
+  rpc ParseBook(RawBook) returns (ParsedBook) {}
+}
