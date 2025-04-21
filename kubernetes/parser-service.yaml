@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parser-service
+  labels:
+    app: parser-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parser-service
+  template:
+    metadata:
+      labels:
+        app: parser-service
+    spec:
+      containers:
+      - name: parser-service
+        image: ntuckus/book-parser-service:latest
+        envFrom:
+        - configMapRef:
+            name: book-scraper-config
+        volumeMounts:
+        - name: data-volume
+          mountPath: /data
+      volumes:
+      - name: data-volume
+        hostPath:
+          path: /mnt/book-parser-data
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: parser-service
+  labels:
+    app: parser-service
+spec:
+  type: ClusterIP
+  selector:
+    app: parser-service
+  ports:
+  - name: grpc
+    port: 50051
+    targetPort: 50051

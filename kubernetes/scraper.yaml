@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scraper
+  labels:
+    app: scraper
+spec:
+  schedule: "0 0 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: book-scraper
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: scraper
+            image: ntuckus/book-scraper:latest
+            imagePullPolicy: IfNotPresent
+            envFrom:
+            - configMapRef:
+                name: book-scraper-config
