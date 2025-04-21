@@ -46,8 +46,8 @@ def validate_availability(amount: int) -> bool:
     return True
 
 
-def validate_url(url: str) -> bool:
-    if not url.startswith(BASE_URL):
+def validate_url(url: str, base: str = BASE_URL) -> bool:
+    if not url.startswith(base):
         logger.info(f"Invalid URL: outside base domain '{url}'.")
         return False
     return True

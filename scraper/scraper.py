@@ -50,7 +50,7 @@ async def parse_and_send(
     except grpc.aio.AioRpcError as e:
         code = e.code()
         msg = e.details()
-        # Errors are already logged by the parser, use debug logging here
+        # Validation errors are already logged by the parser, use debug logging here
         if code == grpc.StatusCode.INVALID_ARGUMENT:
             logger.debug(f"Invalid data at {url}: {msg}")
             return
