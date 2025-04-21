@@ -1,15 +1,16 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: book-scraper-config
 data:
-  BASE_URL:           "https://books.toscrape.com/"
+  BASE_URL: "https://books.toscrape.com/"
 
-  GRPC_PORT:          "50051"
-  OUTPUT_DIR:         "/data"
-  OUTPUT_FILE_NAME:   "books.json"
-  PARSER_LOG_LEVEL:   "INFO"
+  GRPC_PORT: "50051"
+  OUTPUT_DIR: "/data"
+  OUTPUT_FILE_NAME: "books.json"
+  PARSER_LOG_LEVEL: "INFO"
 
-  PARSER_HOST:        "parser-service:50051"
-  CONCURRENCY:        "5"
-  SCRAPER_LOG_LEVEL:  "INFO"
+  PARSER_HOST: "parser-service:50051"
+  CONCURRENCY: "5"
+  SCRAPER_LOG_LEVEL: "INFO"

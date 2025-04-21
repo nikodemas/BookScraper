@@ -1,3 +1,4 @@
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -17,9 +18,9 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-          - name: scraper
-            image: ntuckus/book-scraper:latest
-            imagePullPolicy: IfNotPresent
-            envFrom:
-            - configMapRef:
-                name: book-scraper-config
+            - name: scraper
+              image: ntuckus/book-scraper:latest
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: book-scraper-config
