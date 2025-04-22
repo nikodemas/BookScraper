@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-
+"""
+Implements the web scraping logic to extract book data from the target website
+and sends in a structured format for further processing.
+"""
 import os
 import asyncio
 from urllib.parse import urljoin
@@ -18,6 +21,7 @@ sem = asyncio.Semaphore(CONCURRENCY)
 
 
 async def fetch(session: aiohttp.ClientSession, url: str) -> str:
+    """Fetches the HTML content of a given URL."""
     async with sem:
         async with session.get(url) as resp:
             resp.raise_for_status()
@@ -27,6 +31,7 @@ async def fetch(session: aiohttp.ClientSession, url: str) -> str:
 async def parse_and_send(
     session: aiohttp.ClientSession, stub: rpc.ParserStub, url: str
 ) -> None:
+    """Parses book data from a page and sends it to the parser service."""
     html = await fetch(session, url)
     soup = BeautifulSoup(html, "html.parser")
     name = soup.select_one("div.product_main h1").text.strip()
@@ -65,6 +70,7 @@ async def parse_and_send(
 async def process_page(
     session: aiohttp.ClientSession, stub: rpc.ParserStub, page_url: str
 ) -> None:
+    """Processes a single page of book listings."""
     page_link = urljoin(BASE_URL, page_url)
     html = await fetch(session, page_link)
     soup = BeautifulSoup(html, "html.parser")
@@ -74,6 +80,7 @@ async def process_page(
 
 
 async def scrape() -> None:
+    """Scrapes book data from the target website."""
     logger.info(f"Starting scrape of {BASE_URL} with concurrency {CONCURRENCY}.")
     async with grpc.aio.insecure_channel(PARSER_HOST) as channel:
         stub = rpc.ParserStub(channel)

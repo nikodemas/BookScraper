@@ -1,3 +1,8 @@
+"""
+Reads configuration settings for the parser service from the environment
+variables, including logging setup and output file paths.
+"""
+
 import logging
 import os
 from pathlib import Path
@@ -7,7 +12,7 @@ GRPC_PORT = int(os.getenv("GRPC_PORT", "50051"))
 
 OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR", "data"))
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-OUTPUT_FILE_NAME = os.getenv("OUTPUT_FILE_NAME", "books.json")
+OUTPUT_FILE_NAME = os.getenv("OUTPUT_FILE_NAME", "books.jsonl")
 OUTPUT_FILE = OUTPUT_DIR / OUTPUT_FILE_NAME
 
 LOG_LEVEL = os.getenv("PARSER_LOG_LEVEL", "INFO").upper()

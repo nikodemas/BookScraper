@@ -8,7 +8,7 @@ data:
 
   GRPC_PORT: "50051"
   OUTPUT_DIR: "/data"
-  OUTPUT_FILE_NAME: "books.json"
+  OUTPUT_FILE_NAME: "books.jsonl"
   PARSER_LOG_LEVEL: "INFO"
 
   PARSER_HOST: "parser-service:50051"

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: scraper
 spec:
-  schedule: "0 0 * * *"
+  schedule: "0 6 * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
   jobTemplate:

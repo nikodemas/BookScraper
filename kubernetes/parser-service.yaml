@@ -27,7 +27,7 @@ spec:
       volumes:
         - name: data-volume
           hostPath:
-            path: /mnt/book-parser-data
+            path: /mnt/data
             type: DirectoryOrCreate
 ---
 apiVersion: v1

@@ -1,3 +1,8 @@
+"""
+Reads configuration settings for the scraper from the environment
+variables, including base URL and logging setup.
+"""
+
 import logging
 import os
 

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Implements the gRPC parser service, which validates and processes book data
+received from the scraper and stores it in a JSONL file.
+"""
 import asyncio
 import json
 import logging
@@ -30,14 +34,16 @@ if OUTPUT_FILE.exists():
         logger.warning(f"Failed to load existing JSONL: {e}")
 
 
-def store_record(raw: dict):
+def store_record(raw: dict) -> None:
+    """Stores a validated record in the output file."""
     with OUTPUT_FILE.open("a", encoding="utf-8") as f:
         f.write(json.dumps(raw, ensure_ascii=False) + "\n")
     UPC_SEEN.add(raw["UPC"])
 
 
 class ParserServicer(rpc.ParserServicer):
-    async def ParseBook(self, request, context):
+    async def ParseBook(self, request, context) -> pb.ParsedBook | None:
+        """Parses, validates and stores book data from the request."""
         avail_match = AVAIL_PATTERN.search(request.availability)
         if not avail_match:
             logger.warning(f"Could not parse availability: '{request.availability}'")
@@ -94,7 +100,8 @@ class ParserServicer(rpc.ParserServicer):
         )
 
 
-async def serve():
+async def serve() -> None:
+    """Starts the gRPC server for the parser service."""
     server = grpc.aio.server()
     rpc.add_ParserServicer_to_server(ParserServicer(), server)
     listen_addr = f"[::]:{GRPC_PORT}"
